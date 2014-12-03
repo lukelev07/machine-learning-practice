@@ -1,0 +1,5 @@
+#!/bin/bash
+for i in {1,2,5,10,25} ; do
+    echo "Testing for T = $i"
+    python dec_tree.py $i hw12data/emailDataset/trainFeatures.csv hw12data/emailDataset/trainLabels.csv hw12data/emailDataset/valFeatures.csv hw12data/emailDataset/valLabels.csv
+done

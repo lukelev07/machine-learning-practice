@@ -16,6 +16,7 @@ def classify(x, t_tupes):
         result = np.linalg.norm(x_vectorized-t_vectorized)
         if result < min_dist:
             min_feature = label
+            min_dist = result
     return min_feature
 
 
@@ -37,8 +38,8 @@ for index, val in enumerate(training_label):
 # open vals
 val_file = open('hw12data/digitsDataset/valFeatures.csv','r')
 val_iter = csv.reader(val_file)
-val_set = [int(item[0]) for item in val_iter]
+val_set = [item for item in val_iter]
 
 for image in val_set:
-    print(classify(image, t_set))
+    print(classify([float(item) for item in image], t_set))
 

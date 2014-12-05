@@ -1,0 +1,22 @@
+a)  T=1: 88.6% accuracy
+    T=2: 89.4%
+    T=5: 93.2%
+    T=10: 94%
+    T=25: 94.4%
+    Our highest accuracy was for T=25
+
+b) We had no explicit rule for resolving ties. Python's internal precendence
+happened to classify as spam when there was atie, but this wasn't an explicit
+rule put in place by us. Our accuracy rates were fine without an explicit rule,
+and we think this is because there isn't much other information to use for
+breaking ties. The decision tree already contains plenty of information.
+
+c) Our stopping rule was 3-fold. In order of precedence, we stopped if:
+    1. all the classifications were the same. In this case, there would be no
+    information gain from building the tree further.
+    2. the depth of the tree thus far was larger than 30
+    3. the entropy was less than .005
+    Points 2 and 3 are design to keep our tree from being too specific to the
+    training data
+
+d) n/a

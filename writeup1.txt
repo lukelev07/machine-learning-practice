@@ -1,0 +1,13 @@
+a. Error rates:
+1- 89 errors (this one is best) 
+2- 100 errors 
+5- 95 errors
+10- 115 errors 
+25- 132 errors
+
+b. The tie breaking rule comes in when removing from the heapQ. By convention, the collection picks arbitrarily when looking for most_common, so whichever appears "first" in the list will be the one chosen, if there are ties. 
+
+c. No, it was actually worse. most likely since there are a lot of surrounding 0's, which gives the impression that the majority value is in a different class than what actually should be classified. 
+
+d. I looked at digits 3 and 8. The algorithm most likely mis-classifies these because they look similar, differing only because the 8 is connected on the left side and the 3 is not. An additional feature that might help would be the percentage of completely white pixels in the images, that way, an 8 will have more white pixels than a 3, since there is more number to draw. This would likely result in the correct classification of some of the messed up results.
+

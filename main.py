@@ -47,6 +47,6 @@ val_iter = csv.reader(val_file)
 val_set = [item for item in val_iter]
 
 for image in val_set:
-    k = 1
+    k = int(sys.argv[1])
     print(classify([float(item) for item in image], t_set, k))
 

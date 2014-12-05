@@ -5,19 +5,25 @@ import csv
 import sys
 from numpy import *
 import numpy as np
+from heapq import heappush, heappop
+from collections import Counter
 
 
-def classify(x, t_tupes):
+def classify(x, t_tupes, k=1):
+    heap = []
     min_dist = sys.maxint
     min_feature = sys.maxint
     x_vectorized = array(x)
     for label, value in t_tupes:
         t_vectorized = array(value)
         result = np.linalg.norm(x_vectorized-t_vectorized)
-        if result < min_dist:
-            min_feature = label
-            min_dist = result
-    return min_feature
+        heappush(heap, (result, label))
+        # if result < min_dist:
+        #     min_feature = label
+        #     min_dist = result
+    candidates = Counter([heappop(heap)[1] for i in range(k)])
+    count, label = candidates.most_common()[0]
+    return count
 
 
 # open training data
@@ -41,5 +47,6 @@ val_iter = csv.reader(val_file)
 val_set = [item for item in val_iter]
 
 for image in val_set:
-    print(classify([float(item) for item in image], t_set))
+    k = 1
+    print(classify([float(item) for item in image], t_set, k))
 

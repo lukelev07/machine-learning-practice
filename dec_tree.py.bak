@@ -30,8 +30,8 @@ def max_child_depth(node):
 def should_stop(classifications, depth):
     if len(set(classifications)) is 1: # if all classified as the same
         return classifications[0]
-    if depth > 30:
-        return majority(classifications)
+    # if depth > 30:
+    #     return majority(classifications)
     if entropy(classifications) < .005:
         return majority(classifications)
     return None
@@ -97,7 +97,7 @@ def build_decision_tree(observations, depth):
     right_observations = filter(lambda x: x[0][best_feature] > best_threshold, observations)
 
     return DecisionNode(build_decision_tree(left_observations, depth+1),
-            build_decision_tree(right_observations, depth+1), (best_feature, best_threshold))
+            build_decision_tree(right_observations, depth+1), (feature, threshold))
 
 def classify_from_tree(feature, decision_tree):
     if decision_tree.left is None and decision_tree.right is None:
@@ -117,26 +117,12 @@ def classify_from_trees(feature, decision_trees):
 def print_help():
     print("USAGE: {0} [FEATURES_PATH] [CLASSICATIONS_PATH]".format(sys.argv[0]))
 
-def print_differ(val_features_path, val_classifications_path, trees):
-    val_features_file = open(val_features_path)
-    val_classifications_file = open(val_classifications_path)
-
-    val_features = map(lambda line: map(float, line.strip().split(',')), val_features_file.readlines())
-    val_classifications = map(lambda line: bool(float(line.strip().split(',')[0])), val_classifications_file.readlines())
-    output = map(lambda x: classify_from_trees(x, trees), val_features)
-    differ = 0
-    for i in range(len(output)):
-        if output[i] is not val_classifications[i]:
-            differ += 1
-    print("{0} percent was the same".format((len(output)-differ)/float(len(output))*100))
-
 if __name__ == '__main__':
     if len(sys.argv) != 6:
         print_help()
         sys.exit()
 
     #T = int(sys.argv[1])
-    tests = [1,2,5,10,25]
     T = 25
     features_file = open(sys.argv[2])
     classifications_file = open(sys.argv[3])
@@ -150,12 +136,19 @@ if __name__ == '__main__':
         observations_subset = [random.choice(observations) for _ in range(len(observations)) ]
         # observations_subset = observations
         tree = build_decision_tree(observations_subset, 0)
-        print("Built tree number {0}".format(i+1))
+        print("Built tree number {0}/{1}".format(i+1, T))
         # print("Tree depth: " + str(max_child_depth(tree)))
         trees.append(tree)
 
-        if i+1 in tests:
-            print("Classifying for {0} trees".format(i+1))
-            print_differ(sys.argv[4], sys.argv[5], trees)
+    val_features_file = open(sys.argv[4])
+    val_classifications_file = open(sys.argv[5])
 
-
+    val_features = map(lambda line: map(float, line.strip().split(',')), val_features_file.readlines())
+    # TODO: if there's no val_classifications, don't compare.
+    val_classifications = map(lambda line: bool(float(line.strip().split(',')[0])), val_classifications_file.readlines())
+    output = map(lambda x: classify_from_trees(x, trees), val_features)
+    differ = 0
+    for i in range(len(output)):
+        if output[i] is not val_classifications[i]:
+            differ += 1
+    print("{0} percent was the same".format((len(output)-differ)/float(len(output))*100))
